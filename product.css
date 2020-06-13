@@ -1,0 +1,31 @@
+.product{
+  width: 20rem;
+}
+
+.product img{
+  max-height: 15rem;
+}
+
+.card-title {
+  font-size: 1.2rem;
+}
+
+.card-color{
+  background-color:  #282c34;
+}
+
+.title-color{
+  color: white;
+}
+
+.price-color{
+  color: white;
+}
+
+.second-btn {
+  margin-top: 1rem;
+}
+
+.second-btn a{
+  margin-top: 0.5rem;
+}
