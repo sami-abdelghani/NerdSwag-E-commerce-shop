@@ -12,6 +12,8 @@ class ProductCondensed extends Component{
     this.removeProduct = this.removeProduct.bind(this);
   }
 
+  /*Removes the appropriate product data
+  from the wishlist */
   removeProduct = () => {
     wl_ds.removeWishListItem(this.props.product);
   }

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import logo from '../nerdswag_logo.svg';
 import './App.css';
 
-//Components
+//import the classes of the desired Components
 import HttpService from '../services/http-service';
 import Product from '../product/product';
 import WishList from '../wishlist/wishlist';
@@ -82,7 +82,7 @@ class App extends Component{
   }
 
 
-  
+
 
   render(){
 

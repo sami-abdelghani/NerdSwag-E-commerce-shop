@@ -11,7 +11,6 @@ class WishList extends Component{
 
   constructor(props){
     super(props);
-    //test data
     this.state = {wishList:[]};
 
   //binding functions
@@ -37,8 +36,8 @@ class WishList extends Component{
   onWishListChanged(newWishList){
     this.setState({wishList: newWishList});
   }
-  
-  // Adds the product with info for each product to the wishlist
+
+  // Adds the product with the info for each product to the wishlist
   createWishList = () => {
     const list = this.state.wishList.map((product) =>
       <ProductCondensed product={product} key={product._id} />

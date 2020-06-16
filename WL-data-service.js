@@ -27,7 +27,7 @@ class WL_DataService{
     }
     return false;
   }
-  
+
   //Function to help add product items to the Wishlist
   addWishListItem = item =>
   {
@@ -35,7 +35,7 @@ class WL_DataService{
     ns.postNotification(NOTIF_WISHLIST_CHANGED, wishList);
   }
 
-  //Function to remove the desired product to be removed from eihter the wishlist or Cart
+  //Function to remove the desired product from the wishlist
   removeWishListItem = item => {
     for (let i = 0; i < wishList.length; i++)
     {

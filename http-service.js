@@ -1,5 +1,7 @@
 import 'whatwg-fetch';
 
+/* A HttpService class to execute HTTP requests with
+ the server connected to the MongoDB*/
 class HttpService{
   getProducts = () => {
     let promise = new Promise((resolve, reject) => {
