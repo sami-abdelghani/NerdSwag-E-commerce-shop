@@ -69,10 +69,10 @@ class Product extends Component{
         <div className="card-block card-color">
           <h4 className="card-title title-color">{this.props.product.title}</h4>
           <p className="card-text price-color">Price: ${this.props.product.price}</p>
-          <a href="#" onClick= {() => this.WLButtonClicked()}
-          className={wlbtnClass}>{this.state.onWishList ? "Remove From Wishlist" : "Add to Wishlist"}</a>
-          <div className="second-btn"><a href="#" onClick= {() => this.CButtonClicked()}
-          className="btn btn-success">Add to Cart</a></div>
+          <button onClick= {() => this.WLButtonClicked()}
+          className={wlbtnClass}>{this.state.onWishList ? "Remove From Wishlist" : "Add to Wishlist"}</button>
+          <div className="second-btn"><button onClick= {() => this.CButtonClicked()}
+          className="btn btn-success">Add to Cart</button></div>
         </div>
       </div>
         );

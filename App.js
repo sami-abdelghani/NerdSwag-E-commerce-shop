@@ -6,17 +6,19 @@ import './App.css';
 import HttpService from '../services/http-service';
 import Product from '../product/product';
 import WishList from '../wishlist/wishlist';
+import Login from '../login/login';
 
 const http = new HttpService();
 
 class App extends Component{
   constructor(props){
     super(props);
-    this.state = {products:[]};
+    this.state = {products:[], loginShow: false};
 
     //Bind functions
     this.productRows = this.productRows.bind(this);
     this.productList = this.productList.bind(this);
+    this.showLogin = this.showLogin.bind(this);
   }
 
   //Keeps the product data updated on the App
@@ -81,7 +83,12 @@ class App extends Component{
         return(row_list);
   }
 
-
+    //Toggle to show and hide the login module when the login button is clicked
+    showLogin = e => {
+      this.setState({
+        loginShow: !this.state.loginShow
+      });
+    };
 
 
   render(){
@@ -91,6 +98,9 @@ class App extends Component{
         <div className="App-header">
           <h1>Nerd Swag</h1>
           <div className="App-logo-bg"><img src={logo} className="App-logo" alt="logo" /></div>
+          <div className="App-login"><button onClick={e => {this.showLogin();}}>{this.state.loginShow ? "Close Login" : "Show Login"}</button>
+            <Login loginShow={this.state.loginShow} />
+          </div>
         </div>
         <div className="container-fluid App-main">
           {this.productRows()}

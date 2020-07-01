@@ -7,6 +7,21 @@
   /*padding-left: 225px; */
 }
 
+.App-login{
+  padding: 25px;
+}
+
+.App-login button{
+  border-radius: 5px;
+  border-style: none;
+}
+
+.App-login button:hover{
+  background-color: #282c34;
+  color: white;
+  transition-timing-function: ease-in-out;
+}
+
 .row {
   padding-top: 35px;
 }
@@ -43,7 +58,7 @@
 
 .App-header {
   background-color: #282c34;
-  height: 40vh;
+  height: auto;
   display: flex;
   flex-direction: column;
   align-items: center;

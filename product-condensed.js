@@ -21,7 +21,7 @@ class ProductCondensed extends Component{
   render(){
     return(
         <li className="list-group-item prodcon">
-          <a className="btn btn-outline-danger" onClick={() => this.removeProduct()}>X</a>
+          <button className="btn btn-outline-danger" onClick={() => this.removeProduct()}>X</button>
           <p>{this.props.product.title} | <b>${this.props.product.price}</b></p>
         </li>
         );
