@@ -1,4 +1,8 @@
 
-.prodcon a {
+.prodcon button {
   margin-right: 25px;
+}
+
+.prodcon p {
+  padding-top: 15px;
 }

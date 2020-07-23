@@ -7,6 +7,132 @@
   /*padding-left: 225px; */
 }
 
+.slogan {
+  padding: 7px;
+}
+
+.App-login{
+  padding: 25px;
+}
+
+.openHover button {
+  border-radius: 5px;
+  border-style: none;
+  background-color: #47d147;
+  color: black;
+}
+
+.closeHover button {
+  border-radius: 5px;
+  border-style: none;
+  background-color: #ff3300;
+  color: black;
+}
+
+.openHover button:hover {
+  background-color: #47d147;
+  color: white;
+  transition-timing-function: ease-in-out;
+}
+
+
+.closeHover button:hover {
+  background-color: #ff3300;
+  color: white;
+  transition-timing-function: ease-in-out;
+}
+
+.App-login-reg {
+  display: flex;
+  flex-direction: row;
+}
+
+.ShowLoginbutton {
+  padding: 20px;
+}
+
+.LoginSpace {
+  padding-top: 5px;
+}
+
+.ShowRegbutton {
+  padding: 20px;
+}
+
+.RegSpace {
+  padding-top: 5px;
+}
+
+.ShowLogin {
+  padding: 20px;
+  align-content: space-between;
+}
+
+.ShowLogin form {
+  display: flex;
+  flex-direction: column;
+  align-content: center;
+}
+
+.ShowLogin label {
+  padding: 12px;
+}
+
+.ShowReg {
+  padding: 20px;
+  align-content: space-between;
+}
+
+.ShowReg form {
+  display: flex;
+  flex-direction: column;
+  align-content: center;
+}
+
+.ShowReg label {
+  padding: 12px;
+}
+
+.Fieldtext {
+  text-align: left;
+  padding: 2px;
+}
+
+.ShowLogout {
+  padding: 20px;
+}
+
+.ShowLogout button {
+  border-radius: 5px;
+  border-style: none;
+  background-color: #ff3300;
+  color: black;
+}
+
+.ShowLogout button:hover {
+  background-color: #ff3300;
+  color: white;
+  transition-timing-function: ease-in-out;
+}
+
+.NotShowLogin {
+  visibility: hidden;
+  width: 0;
+  height: 0;
+}
+
+.NotShowReg {
+  visibility: hidden;
+  width: 0;
+  height: 0;
+}
+
+.NotShowLogout {
+  visibility: hidden;
+  width: 0;
+  height: 0;
+}
+
 .row {
   padding-top: 35px;
 }
@@ -43,7 +169,7 @@
 
 .App-header {
   background-color: #282c34;
-  height: 40vh;
+  height: auto;
   display: flex;
   flex-direction: column;
   align-items: center;

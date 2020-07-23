@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
 import './wishlist.css';
 import ProductCondensed from '../product-condensed/product-condensed';
-import WL_DataService from '../services/WL-data-service';
 import NotificationService, {NOTIF_WISHLIST_CHANGED}
  from '../services/notification-service';
 
@@ -48,7 +47,7 @@ class WishList extends Component{
   render(){
     return(
       <div className="card wishlist">
-        <div className="card-block card-color">
+        <div className="card-block wishlist-color">
           <h4 className="card-title title-color">NerdSwag Wishlist</h4>
           <ul className="list-group">
             {this.createWishList()}
