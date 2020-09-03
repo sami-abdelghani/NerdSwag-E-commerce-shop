@@ -1,3 +1,9 @@
 .wishlist-color {
   background-color: #1a53ff;
 }
+
+.notShowWishlist {
+  visibility: hidden;
+  width: 0;
+  height: 0;
+}

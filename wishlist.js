@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import './wishlist.css';
-import ProductCondensed from '../product-condensed/product-condensed';
+import ProductCondensedWL from '../product-condensed/product-condensed_WL';
 import NotificationService, {NOTIF_WISHLIST_CHANGED}
  from '../services/notification-service';
 
@@ -39,19 +39,35 @@ class WishList extends Component{
   // Adds the product with the info for each product to the wishlist
   createWishList = () => {
     const list = this.state.wishList.map((product) =>
-      <ProductCondensed product={product} key={product._id} />
+      <ProductCondensedWL product={product} key={product._id} />
     );
     return(list);
   }
 
   render(){
+
+    let wishlistDisplay;
+
+    /*If loggedin to an account then the wishlist will display,
+    otherwise the wishlist will not dispaly*/
+    if(this.props.loginDisplay)
+    {
+      wishlistDisplay = ""
+    }
+    else
+    {
+      wishlistDisplay = "notShowWishlist"
+    }
+
     return(
-      <div className="card wishlist">
-        <div className="card-block wishlist-color">
-          <h4 className="card-title title-color">NerdSwag Wishlist</h4>
-          <ul className="list-group">
-            {this.createWishList()}
-          </ul>
+      <div className={wishlistDisplay}>
+        <div className="card wishlist">
+          <div className="card-block wishlist-color">
+            <h4 className="card-title title-color">NerdSwag Wishlist</h4>
+            <ul className="list-group">
+              {this.createWishList()}
+            </ul>
+          </div>
         </div>
       </div>
         );

@@ -1,0 +1,58 @@
+.cart-color {
+  background-color: #47d147;
+}
+
+.first-column {
+  align-items: flex-start;
+}
+
+.second-column {
+  align-items: flex-end;
+}
+
+.total-balance {
+  background-color: #282c34;
+  color: white;
+  font-weight: 900;
+  font-size: 1.5rem;
+  padding-bottom: 10px;
+}
+
+.totalPrice {
+  padding-bottom: 15px;
+  text-decoration: underline;
+}
+
+.remainingBalance {
+  padding-bottom: 15px;
+}
+
+.purchase {
+  padding: 15px;
+  display: flex;
+  align-content: center;
+  justify-content: center;
+}
+
+.purchase-sec {
+  font-size: 2em;
+}
+
+.purchase button {
+  border-radius: 5px;
+  border-style: none;
+  background-color: #282c34;
+  color: white;
+}
+
+.purchase button:hover {
+  background-color: #282c34;
+  color: #47d147;
+  transition-timing-function: ease-in-out;
+}
+
+.notShowCart {
+  visibility: hidden;
+  width: 0;
+  height: 0;
+}

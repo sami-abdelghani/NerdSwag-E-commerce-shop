@@ -6,6 +6,7 @@ import './App.css';
 import HttpService from '../services/http-service';
 import Product from '../product/product';
 import WishList from '../wishlist/wishlist';
+import Cart from '../cart/cart';
 
 const http = new HttpService();
 
@@ -17,11 +18,15 @@ class App extends Component{
       accounts:[],
       loginShow: false,
       regShow: false,
+      editBShow: false,
       logoutShow: false,
+      accountID: "",
       username: "",
       password: "",
       email: "",
-      balance: 0};
+      balance: 0,
+      editBalance: 0
+    };
 
     //Bind functions
     this.productRows = this.productRows.bind(this);
@@ -35,10 +40,15 @@ class App extends Component{
     this.regMatch = this.regMatch.bind(this);
     this.submitReg = this.submitReg.bind(this);
 
+    this.showEdit = this.showEdit.bind(this);
+    this.submitEditBal = this.submitEditBal.bind(this);
+
     this.usernameChange = this.usernameChange.bind(this);
     this.passwordChange = this.passwordChange.bind(this);
     this.emailChange = this.emailChange.bind(this);
     this.balanceChange = this.balanceChange.bind(this);
+    this.editBalance = this.editBalance.bind(this);
+    this.remainingBalance = this.remainingBalance.bind(this);
   }
 
   //Keeps the product data updated and to help update the Account data from the MongoDB database
@@ -65,7 +75,7 @@ class App extends Component{
   productList = (tuple) => {
     let tuple_list = tuple.map((product) =>
       <div className="col-sm-4" key={product._id}>
-        <Product product={product} />
+        <Product product={product} loginDisplay={this.state.logoutShow} />
       </div>
 
         );
@@ -136,6 +146,14 @@ class App extends Component{
 
     };
 
+    //Toggle to show and hide the edit balance module when the show or close edit balance button is clicked
+    showEdit = e => {
+      this.setState({
+        editBShow: !this.state.editBShow
+      });
+
+    };
+
     /*Toggles to show and hide the logout button depending when
      the user is signed in or clicks it to logout of their account */
     showLogout = async e => {
@@ -154,6 +172,8 @@ class App extends Component{
       await this.setState({username: ""});
       await this.setState({password: ""});
       await this.setState({email: ""});
+      await this.setState({accountID: ""});
+      await this.setState({balance: 0});
       await this.setState({balance: 0});
 
       alert("You logged out successfully!");
@@ -168,6 +188,15 @@ class App extends Component{
       Otherwise it returns false */
     async loginMatch(usr_name, pswrd){
 
+      //To retrieve an updated list of the accounts' information after updates occured on the balance of each account
+      await http.getAccounts().then(
+        data => {
+          this.setState({accounts: data});
+        },
+        err => {
+
+        });
+
       let acc_list_len = this.state.accounts.length;
 
       for(let i = 0; i < acc_list_len; i++)
@@ -181,6 +210,7 @@ class App extends Component{
 
           await this.setState({email: this.state.accounts[i].email});
           await this.setState({balance: this.state.accounts[i].balance});
+          await this.setState({accountID: this.state.accounts[i]._id});
 
           return true;
         }
@@ -293,12 +323,60 @@ class App extends Component{
 
    }
 
+   //To retrieve an updated list of the accounts after the new account is created, so the balnace could be edited when logged in after the new account is created
+   await http.getAccounts().then(
+     data => {
+       this.setState({accounts: data});
+     },
+     err => {
+
+     });
+
+     // It needs to be done twice so the accounts can be updated on the database and the accounts array
+     await http.getAccounts().then(
+       data => {
+         this.setState({accounts: data});
+       },
+       err => {
+
+       });
+
+
+
    if(!((this.state.username === "") || (this.state.password === "") || (this.state.email === "") || (this.state.balance === "")) && !(regMatch_bool))
    {
      await this.setState({logoutShow: true});
+     await this.setState({accountID: this.state.accounts[this.state.accounts.length-1]._id});
    }
 
 };
+
+    //Edits the current logged in user's account balance to the user's desired input balance amount
+    submitEditBal = async e => {
+
+        fetch('http://localhost:3000/account/'+this.state.accountID, {
+          method: 'put',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+
+            balance: this.state.editBalance,
+
+          })
+          }).then(res => {
+            res.json();
+            alert("You have successfully edited your balance to your desired amount.");
+          },
+              err => {
+                    alert("An error occurred and your balance wasn't edited to your desired amount. Please try again.");
+
+              });
+
+          await this.setState({balance: this.state.editBalance});
+          await this.setState({editBalance: 0});
+      };
+
 
     //Makes sure that the input value for the username is updated for the username state Login or Registration value
     usernameChange = e => {
@@ -319,6 +397,18 @@ class App extends Component{
       balanceChange = e => {
           this.setState({balance: e.target.value}, () => console.log(this.state.balance));
         };
+
+      //Makes sure that the input value for the balance is updated for the editBalance state Edit value
+      editBalance = e => {
+            this.setState({editBalance: e.target.value}, () => console.log(this.state.editBalance));
+          };
+
+      //Sets the balance of the user's account after a successful purchase has been completed
+      async remainingBalance(cart_rem_bal){
+         await this.setState({balance: cart_rem_bal});
+      };
+
+
 
 
   render(){
@@ -358,7 +448,7 @@ class App extends Component{
               </div>
             </div>
 
-            <div className={this.state.logoutShow || this.state.loginShow? "NotShowReg" : "ShowRegbutton"}>
+            <div className={this.state.logoutShow || this.state.loginShow ? "NotShowReg" : "ShowRegbutton"}>
               <div className={this.state.regShow ? "closeHover" : "openHover"}>
                 <button onClick={e => {this.showReg();}}>{this.state.regShow ? "Close Sign up" : "Show Sign up"}</button>
               </div>
@@ -385,21 +475,37 @@ class App extends Component{
               </div>
             </div>
 
-            <div className={this.state.logoutShow ? "ShowLogout" : "NotShowLogout"}>
+            <div className={this.state.logoutShow && !(this.state.editBShow)? "ShowLogout" : "NotShowLogout"}>
               <button onClick={e => {this.showLogout();}}>{this.state.logoutShow ? "Logout" : ""}</button>
+            </div>
+
+            <div className={this.state.logoutShow ? "ShowEditButton" : "NotShowEditBal"}>
+              <div className={this.state.editBShow ? "closeEdit" : "showEdit"}>
+                <button onClick={e => {this.showEdit();}}>{this.state.editBShow ? "Close Edit Balance" : "Show Edit Balance"}</button>
+              </div>
+
+              <div className={this.state.editBShow ? "ShowEditBal" : "NotShowEditBal"}>
+                <form>
+                  <label>
+                    <div className="Fieldtext">Input Desired Balance:</div>
+                    <input type="number" value={this.state.editBalance} onChange={this.editBalance} />
+                  </label>
+                  <div className="showEdit editBalance"><button onClick={e => {e.preventDefault(); this.submitEditBal()}}>Edit Balance</button></div>
+                </form>
+              </div>
             </div>
 
           </div>
         </div>
-        
+
         <div className="container-fluid App-main">
           {this.productRows()}
           <div className="row Lists">
             <div className="col-sm-6">
-              <WishList />
+              <WishList loginDisplay={this.state.logoutShow} />
             </div>
             <div className="col-sm-6">
-              <WishList />
+              <Cart userBalance={this.state.balance} accID={this.state.accountID} userEmail={this.state.email} setaccBalance={this.remainingBalance} loginDisplay={this.state.logoutShow} />
             </div>
           </div>
         </div>
@@ -408,5 +514,7 @@ class App extends Component{
 
   }
 }
+
+
 
 export default App;

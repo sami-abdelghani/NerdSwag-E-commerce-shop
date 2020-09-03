@@ -57,7 +57,8 @@ class NotificationService{
     }
   }
 
-  /* Export NOTIF_WISHLIST_CHANGED as a global constant as it is the central constant
-   to store notifications for all the changes to the wishlist */
+  /* Export NOTIF_WISHLIST_CHANGED and NOTIF_CART_CHANGED as a global constant as it is the central constant
+   to store notifications for all the changes to the wishlist and cart appropriately*/
   export const NOTIF_WISHLIST_CHANGED = "The wishlist has been changed";
+  export const NOTIF_CART_CHANGED = "The cart has been changed";
   export default NotificationService;

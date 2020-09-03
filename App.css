@@ -19,14 +19,14 @@
   border-radius: 5px;
   border-style: none;
   background-color: #47d147;
-  color: black;
+  color: #282c34;
 }
 
 .closeHover button {
   border-radius: 5px;
   border-style: none;
   background-color: #ff3300;
-  color: black;
+  color: #282c34;
 }
 
 .openHover button:hover {
@@ -56,6 +56,10 @@
 }
 
 .ShowRegbutton {
+  padding: 20px;
+}
+
+.ShowEditButton {
   padding: 20px;
 }
 
@@ -93,6 +97,52 @@
   padding: 12px;
 }
 
+.ShowEditBal {
+  padding: 20px;
+  align-content: space-between;
+}
+
+.ShowEditBal form {
+  display: flex;
+  flex-direction: column;
+  align-content: center;
+}
+
+.ShowEditBal label {
+  padding: 12px;
+}
+
+.editBalance {
+  padding-top: 5px;
+}
+
+.showEdit button {
+  border-radius: 5px;
+  border-style: none;
+  background-color: #1a53ff;
+  color: white;
+}
+
+.closeEdit button {
+  border-radius: 5px;
+  border-style: none;
+  background-color: #ff3300;
+  color: #282c34;
+}
+
+.showEdit button:hover {
+  background-color: white;
+  color: #1a53ff;
+  transition-timing-function: ease-in-out;
+}
+
+
+.closeEdit button:hover {
+  background-color: #ff3300;
+  color: white;
+  transition-timing-function: ease-in-out;
+}
+
 .Fieldtext {
   text-align: left;
   padding: 2px;
@@ -100,13 +150,14 @@
 
 .ShowLogout {
   padding: 20px;
+  align-content: space-between;
 }
 
 .ShowLogout button {
   border-radius: 5px;
   border-style: none;
   background-color: #ff3300;
-  color: black;
+  color: #282c34;
 }
 
 .ShowLogout button:hover {
@@ -133,6 +184,12 @@
   height: 0;
 }
 
+.NotShowEditBal {
+  visibility: hidden;
+  width: 0;
+  height: 0;
+}
+
 .row {
   padding-top: 35px;
 }
@@ -142,11 +199,7 @@
   justify-content: center;
 }
 
-/*
-.Lists {
-  padding-left: 60px;
-}
-*/
+
 
 .App-logo-bg {
   height: auto;

@@ -26,6 +26,12 @@
   margin-top: 1rem;
 }
 
-.second-btn a{
+.second-btn button{
   margin-top: 0.5rem;
+}
+
+.notShowButtons {
+  visibility: hidden;
+  width: 0;
+  height: 0;
 }
