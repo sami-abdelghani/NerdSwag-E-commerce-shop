@@ -199,7 +199,63 @@
   justify-content: center;
 }
 
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width:100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+}
 
+.modal-main {
+  position:fixed;
+  background: #282c34;
+  color: white;
+  min-height: 180px;
+  min-width: 400px;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  border-radius: 15px;
+  padding-top: 15px;
+  padding-bottom: 15px;
+  padding-left: 30px;
+  padding-right: 30px;
+  top:50%;
+  left:50%;
+  transform: translate(-50%,-50%);
+}
+
+.modal-main p {
+  padding-top: 15px;
+  padding-bottom: 15px;
+  display: flex;
+  justify-content: center;
+}
+
+.displayModal {
+  display: block;
+}
+
+.displayNone {
+  display: none;
+}
+
+.closeModal button {
+  height: 40px;
+  width: 110px;
+  border-radius: 5px;
+  border-style: none;
+  background-color: #1a53ff;
+  color: white;
+}
+
+.closeModal button:hover {
+  background-color: #47d147;
+  color: white;
+  transition-timing-function: ease-in-out;
+}
 
 .App-logo-bg {
   height: auto;

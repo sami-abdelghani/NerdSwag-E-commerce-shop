@@ -1,3 +1,4 @@
+
 //This is to build a Singleton Data service for the wishlist
 import NotificationService, {NOTIF_WISHLIST_CHANGED}
 from './notification-service';
@@ -11,16 +12,18 @@ let wishList = [];
 
 class WL_DataService{
   constructor(){
+
     if(!instance){
       instance = this;
     }
     return instance;
   }
 
-  //This function checks if the product is on the wishlist
+  //Checks if the product is on the wishlist
   itemOnWishList = item => {
     for(let i = 0; i < wishList.length; i++){
-      if(wishList[i]._id === item._id)
+
+      if(wishList[i] === item._id)
       {
         return true;
       }
@@ -28,18 +31,18 @@ class WL_DataService{
     return false;
   }
 
-  //Function to help add product items to the Wishlist
+  //Adds product items to the Wishlist
   addWishListItem = item =>
   {
-    wishList.push(item);
+    wishList.push(item._id);
     ns.postNotification(NOTIF_WISHLIST_CHANGED, wishList);
   }
 
-  //Function to remove the desired product from the wishlist
+  //Removes the desired product from the wishlist
   removeWishListItem = item => {
     for (let i = 0; i < wishList.length; i++)
     {
-      if(wishList[i]._id === item._id)
+      if(wishList[i] === item._id)
       {
           wishList.splice(i,1);
           ns.postNotification(NOTIF_WISHLIST_CHANGED, wishList);

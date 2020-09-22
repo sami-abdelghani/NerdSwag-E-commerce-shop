@@ -8,6 +8,7 @@ import Product from '../product/product';
 import WishList from '../wishlist/wishlist';
 import Cart from '../cart/cart';
 
+
 const http = new HttpService();
 
 class App extends Component{
@@ -20,6 +21,8 @@ class App extends Component{
       regShow: false,
       editBShow: false,
       logoutShow: false,
+      showModal: false,
+      modalMessage: "",
       accountID: "",
       username: "",
       password: "",
@@ -42,6 +45,9 @@ class App extends Component{
 
     this.showEdit = this.showEdit.bind(this);
     this.submitEditBal = this.submitEditBal.bind(this);
+
+    this.toggleModal = this.toggleModal.bind(this);
+    this.setModalMessage = this.setModalMessage.bind(this);
 
     this.usernameChange = this.usernameChange.bind(this);
     this.passwordChange = this.passwordChange.bind(this);
@@ -91,8 +97,8 @@ class App extends Component{
     //list of products
     let products_list = this.state.products;
 
-    /*Every third index to slice arraylist of products into tuples
-     of three products every Arraylist in an ArrayList */
+    /*Every third index of the arraylist of products is sliced
+    into a separate arraylist of tuples of three products */
     let j = 0;
     let tuplesList = [];
 
@@ -122,7 +128,7 @@ class App extends Component{
   }
 
 
-    //Toggle to show and hide the login module when the login button is clicked
+    //Toggles to show and hide the login module when the login button is clicked
     showLogin = e => {
       this.setState({
         loginShow: !this.state.loginShow
@@ -134,7 +140,7 @@ class App extends Component{
 
     };
 
-    //Toggle to show and hide the registration module when the sign up button is clicked
+    //Toggles to show and hide the registration module when the sign up button is clicked
     showReg = e => {
       this.setState({
         regShow: !this.state.regShow
@@ -146,10 +152,18 @@ class App extends Component{
 
     };
 
-    //Toggle to show and hide the edit balance module when the show or close edit balance button is clicked
+    //Toggles to show and hide the edit balance module when the show or close edit balance button is clicked
     showEdit = e => {
       this.setState({
         editBShow: !this.state.editBShow
+      });
+
+    };
+
+    //Toggles to show and hide the popup modal to inform the user of the result of the user's attempted actions
+    toggleModal = e => {
+      this.setState({
+        showModal: !this.state.showModal
       });
 
     };
@@ -176,7 +190,10 @@ class App extends Component{
       await this.setState({balance: 0});
       await this.setState({balance: 0});
 
-      alert("You logged out successfully!");
+      let message = "You logged out successfully!";
+      await this.setModalMessage(message);
+      await this.toggleModal();
+
 
     };
 
@@ -228,16 +245,25 @@ class App extends Component{
         the user not submitting the required info to login to an account*/
      if((this.state.username === "") || (this.state.password === ""))
      {
-         alert("All of the required information is needed to login into an account. Please input all the neccessary information.");
+         let message = "All of the required information is needed to login into an account. Please input all the neccessary information.";
+         await this.setModalMessage(message);
+         await this.toggleModal();
+
      }
      else if(loginMatch_bool)
      {
-       alert("You logged in successfully!");
+       let message = "You logged in successfully!";
+       await this.setModalMessage(message);
+       await this.toggleModal();
+
        await this.setState({logoutShow: true});
      }
       else
      {
-         alert("The incorrect username and/or password was entered!");
+         let message = "The incorrect username and/or password was entered!";
+         await this.setModalMessage(message);
+         await this.toggleModal();
+
      }
 
   };
@@ -286,12 +312,17 @@ class App extends Component{
       the user not submitting the required info to create an account*/
    if((this.state.username === "") || (this.state.password === "") || (this.state.email === "") || (this.state.balance === ""))
    {
-       alert("All of the required information is needed to create an account. Please input all the neccessary information.");
+       let message = "All of the required information is needed to create an account. Please input all the neccessary information.";
+       await this.setModalMessage(message);
+       await this.toggleModal();
+
    }
    else if(regMatch_bool)
    {
 
-      alert("An account already exists with the account information you submitted.");
+      let message = "An account already exists with the account information you submitted.";
+      await this.setModalMessage(message);
+      await this.toggleModal();
 
    }
     else
@@ -312,18 +343,23 @@ class App extends Component{
       })
     }).then(res => {
         res.json();
-        alert("You successfully created an account and logged in!");
 
+        let message = "You successfully created an account and logged in!";
+        this.setModalMessage(message);
+        this.toggleModal();
 
     },
           err => {
-                alert("An error occurred and the account was not created.");
+
+                let message = "An error occurred and the account was not created.";
+                this.setModalMessage(message);
+                this.toggleModal();
 
           });
 
    }
 
-   //To retrieve an updated list of the accounts after the new account is created, so the balnace could be edited when logged in after the new account is created
+   //To retrieve an updated list of the accounts after the new account is created, so the balance could be edited when logged in after the new account is created
    await http.getAccounts().then(
      data => {
        this.setState({accounts: data});
@@ -332,7 +368,7 @@ class App extends Component{
 
      });
 
-     // It needs to be done twice so the accounts can be updated on the database and the accounts array
+     //It needs to be done twice so the accounts can be updated on the accounts state array
      await http.getAccounts().then(
        data => {
          this.setState({accounts: data});
@@ -342,19 +378,25 @@ class App extends Component{
        });
 
 
-
+  //Allows the logout button to be displayed and the logged in display to be displayed on the webpage after creating an unique account
    if(!((this.state.username === "") || (this.state.password === "") || (this.state.email === "") || (this.state.balance === "")) && !(regMatch_bool))
    {
      await this.setState({logoutShow: true});
+
+     //Retrieve the newly cerated account's id so the data from the account can be edited
      await this.setState({accountID: this.state.accounts[this.state.accounts.length-1]._id});
    }
 
 };
 
-    //Edits the current logged in user's account balance to the user's desired input balance amount
+    /* Edits the current logged in user's account balance to the user's desired input balance amount
+      and sends a message to the user regarding thier attempt to edit thier balance */
     submitEditBal = async e => {
 
-        fetch('http://localhost:3000/account/'+this.state.accountID, {
+      //boolean for determining a successful edit to the user's account's balance
+      let succ_edit = false;
+
+      await fetch('http://localhost:3000/account/balance/'+this.state.accountID, {
           method: 'put',
           headers: {
             'Content-Type': 'application/json'
@@ -366,14 +408,29 @@ class App extends Component{
           })
           }).then(res => {
             res.json();
-            alert("You have successfully edited your balance to your desired amount.");
+
+            succ_edit = true;
+            let message = "You have successfully edited your balance to your desired amount.";
+            this.setModalMessage(message);
+            this.toggleModal();
+
           },
               err => {
-                    alert("An error occurred and your balance wasn't edited to your desired amount. Please try again.");
+                    let message = "An error occurred and your balance wasn't edited to your desired amount. Please try again.";
+                    this.setModalMessage(message);
+                    this.toggleModal();
 
               });
 
-          await this.setState({balance: this.state.editBalance});
+          /* If there was a successful edit to the user's balance in their account in the MongoDB database,
+          then represent the newly edited available balance to display on the cart component. For this to happen,
+          the balance state variable needs to be set to the edit balance state variable value. */
+          if(succ_edit)
+          {
+              await this.setState({balance: this.state.editBalance});
+          }
+
+          //Resetting the edit balance state variable value to zero after the attempt to edit the user's balance
           await this.setState({editBalance: 0});
       };
 
@@ -408,7 +465,10 @@ class App extends Component{
          await this.setState({balance: cart_rem_bal});
       };
 
-
+      //Sets the modalMessage to the appropriate message for the user's attempted actions
+      async setModalMessage(message){
+         await this.setState({modalMessage: message});
+      };
 
 
   render(){
@@ -502,19 +562,30 @@ class App extends Component{
           {this.productRows()}
           <div className="row Lists">
             <div className="col-sm-6">
-              <WishList loginDisplay={this.state.logoutShow} />
+              <WishList loginDisplay={this.state.logoutShow} accID={this.state.accountID} />
             </div>
             <div className="col-sm-6">
-              <Cart userBalance={this.state.balance} accID={this.state.accountID} userEmail={this.state.email} setaccBalance={this.remainingBalance} loginDisplay={this.state.logoutShow} />
+              <Cart userBalance={this.state.balance} accID={this.state.accountID} userEmail={this.state.email}
+                setaccBalance={this.remainingBalance} setMessage={this.setModalMessage} showModal={this.toggleModal} loginDisplay={this.state.logoutShow} />
             </div>
           </div>
         </div>
+
+        <div className={this.state.showModal ? "modal displayModal" : "modal displayNone"}>
+          <section className="modal-main">
+            <h4>NerdSwag Message</h4>
+            <p>{this.state.modalMessage}</p>
+            <div className="closeModal"><button onClick={e => {this.toggleModal()}}>Ok</button></div>
+          </section>
+        </div>
+
       </div>
+
+
     );
 
   }
 }
-
 
 
 export default App;

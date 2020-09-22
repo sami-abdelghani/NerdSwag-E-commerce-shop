@@ -23,25 +23,26 @@ class Product extends Component{
       onCart: cart_ds.itemOnCart()
     };
 
+    //bind functions
     this.onWishListChanged = this.onWishListChanged.bind(this);
     this.onCartChanged = this.onCartChanged.bind(this);
     this.WLButtonClicked = this.WLButtonClicked.bind(this);
     this.CButtonClicked = this.CButtonClicked.bind(this);
   }
 
-  /* Sets the state on the wishlist when the wishlist changes
+  /* Sets the state on the wishlist when the wishlist changes,
     to display the correct list of products in the wishlist appropriately */
   onWishListChanged(newWishList){
     this.setState({onWishList: wl_ds.itemOnWishList(this.props.product)});
   }
 
-  /* Sets the state on the cart when the cart changes
+  /* Sets the state on the cart when the cart changes,
     to display the correct list of products in the cart appropriately */
   onCartChanged(newCart){
     this.setState({onCart: cart_ds.itemOnCart(this.props.product)});
   }
 
-  /* adds the NOTIF_WISHLIST_CHANGED and NOTIF_CART_CHANGED observer
+  /* Adds the NOTIF_WISHLIST_CHANGED and NOTIF_CART_CHANGED observer
    to observer all the notifications that change the wishlist or cart appropriately
     and adds the designated notification when executing an action that changes the wishlist or cart appropriately*/
   componentDidMount(){
@@ -49,14 +50,14 @@ class Product extends Component{
     ns.addObserver(NOTIF_CART_CHANGED, this, this.onCartChanged);
   }
 
-  /* removes the designated notification from the NOTIF_WISHLIST_CHANGED and NOTIF_CART_CHANGED observer
+  /* Removes the designated notification from the NOTIF_WISHLIST_CHANGED and NOTIF_CART_CHANGED observer
    when the designated notification is completed and changes either the wishlist or the cart appropriately*/
   componentWillUnmount(){
     ns.removeObserver(this, NOTIF_WISHLIST_CHANGED);
     ns.removeObserver(this, NOTIF_CART_CHANGED);
   }
 
-  /*The function that when the add wishlist button is clicked on a product,
+  /* When the add wishlist button is clicked on a product,
   it adds the appropriate product's property data to the wishlist */
   WLButtonClicked = () => {
     if(this.state.onWishList){
@@ -67,7 +68,7 @@ class Product extends Component{
     }
   }
 
-  /*The function that when the add cart button is clicked on a product,
+  /* When the add cart button is clicked on a product,
   it adds the appropriate product's property data to the cart */
   CButtonClicked = () => {
     if(this.state.onCart){
@@ -87,7 +88,7 @@ class Product extends Component{
 
     let buttonDisplay;
 
-    /*depending on if the designated product is on the wishlist or not,
+    /* Depending on if the designated product is on the wishlist or not,
     the color of the button will vary */
     if(this.state.onWishList){
       wlbtnClass = "btn btn-danger";
@@ -96,7 +97,7 @@ class Product extends Component{
       wlbtnClass = "btn btn-primary";
     }
 
-    /*depending on if the designated product is on the cart or not,
+    /* Depending on if the designated product is on the cart or not,
     the color of the button will vary */
     if(this.state.onCart){
       cart_buttonstyle = "btn btn-danger";
@@ -105,15 +106,15 @@ class Product extends Component{
       cart_buttonstyle = "btn btn-success";
     }
 
-    /*If loggedin to an account then the add to wishlist and add to cart buttons will display for each product,
-    otherwise the buttons will not dispaly*/
+    /* If the user is logged into an account, then add to wishlist and add to cart buttons will display for each product;
+    otherwise the buttons will not display */
     if(this.props.loginDisplay)
     {
-      buttonDisplay = ""
+      buttonDisplay = "";
     }
     else
     {
-      buttonDisplay = "notShowButtons"
+      buttonDisplay = "notShowButtons";
     }
 
     return(

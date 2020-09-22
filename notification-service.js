@@ -1,4 +1,5 @@
-// keeps track of actions to notifiy about requested or enqued actions so they can be executed properly
+
+// Keeps track of actions to notifiy about requested or enqued actions so they can be executed properly
 let instance = null;
 let observers = {};
 
@@ -23,8 +24,8 @@ class NotificationService{
       }
   }
 
-  /*adds the type of actions that need to be notified in a observers hashmap
-  based on the type of notification*/
+  /* Adds the type of actions that need to be notified in a observers hashmap
+  based on the type of notification */
   addObserver = (notif, observer, callBack) => {
       let obs = observers[notif];
       if(!obs){
@@ -38,8 +39,8 @@ class NotificationService{
         observers[notif].push(obj);
     }
 
-    /*removes the type of actions that have been notified from the observers hashmap
-    based on the type of notification*/
+    /* Removes the type of actions that have been notified from the observers hashmap
+    based on the type of notification */
     removeObserver = (observer, notif) => {
       let obs = observers[notif];
       if(obs)
@@ -58,7 +59,7 @@ class NotificationService{
   }
 
   /* Export NOTIF_WISHLIST_CHANGED and NOTIF_CART_CHANGED as a global constant as it is the central constant
-   to store notifications for all the changes to the wishlist and cart appropriately*/
+   to store notifications for all the changes to the wishlist and cart appropriately */
   export const NOTIF_WISHLIST_CHANGED = "The wishlist has been changed";
   export const NOTIF_CART_CHANGED = "The cart has been changed";
   export default NotificationService;

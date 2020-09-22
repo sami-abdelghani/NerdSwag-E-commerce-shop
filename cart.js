@@ -4,10 +4,13 @@ import ProductCondensedCart from '../product-condensed/product-condensed_Cart';
 import NotificationService, {NOTIF_CART_CHANGED}
  from '../services/notification-service';
 import Cart_DataService from '../services/Cart-data-service';
+import HttpService from '../services/http-service';
 
 let ns = new NotificationService();
 
 let cart_ds = new Cart_DataService();
+
+let http = new HttpService();
 
 class Cart extends Component{
   constructor(props){
@@ -29,29 +32,82 @@ class Cart extends Component{
 
 }
 
-  /* adds the NOTIF_CART_CHANGED observer
-   to observer all the notifications that change the cart
-    and adds the designated notification when executing an action that changes the cart*/
+  /* Adds the NOTIF_CART_CHANGED observer
+   to observe all the notifications that change the cart
+   and adds the designated notification when executing an action that changes the cart*/
   componentDidMount(){
+
+    if(this.props.loginDisplay){
+
+        // Retrieves the designated account's cart data from the server connected to the MongoDB database
+        http.getAccountCart(this.props.accID).then(
+            data => {
+              this.setState({cart: data});
+            },
+            err => {
+
+            });
+
+    }
+
+    //Displays the updated cart component
+    this.createCart();
+
     ns.addObserver(NOTIF_CART_CHANGED, this, this.onCartChanged);
   }
 
-  /* removes the designated notification from the NOTIF_CART_CHANGED observer
+  /* Removes the designated notification from the NOTIF_CART_CHANGED observer
    when the designated notification is completed and changes the cart*/
   componentWillUnmount(){
     ns.removeObserver(this, NOTIF_CART_CHANGED);
   }
 
-  /* Sets the state on the cart when the cart changes
-    to dispaly the correct list of products in the cart appropriately
-    and sets the new added total cost of products put in the cart */
+  /* Sets the state on the cart when the cart changes,
+  to display the correct list of products in the cart component
+  from the user's account's cart in the database. This also updates
+  the cart in the designated account's cart from the MongoDB database,
+  to make sure the cart component displays the updated data appropriately.
+  This also sets the new added total cost of products put in the cart. */
   async onCartChanged(newCart){
-    await this.setState({cart: newCart});
+    await fetch('http://localhost:3000/account/cart/'+this.props.accID, {
+    method: 'put',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+
+      cart: newCart,
+
+    })
+    }).then(res => {
+      res.json();
+
+    },
+        err => {
+
+              let message = "An error occurred and the product couldn't be added to your cart. Please try again.";
+              this.props.setMessage(message);
+              this.props.showModal();
+
+        });
+
+      //Retrieves the designated account's cart data from the server connected to the MongoDB database
+       await http.getAccountCart(this.props.accID).then(
+          data => {
+            this.setState({cart: data.cart});
+          },
+          err => {
+
+          });
+
+    //Creates the updated display for the cart component
     await this.createCart();
+
     await this.setState({cartTotal: this.addSumTotal()});
   }
 
-  // Adds the product with the info for each product to the cart
+  /* Gets the appropriate product info for each product in the cart,
+  so the products can display in the cart component */
   createCart = () => {
     let list = this.state.cart.map((product) =>
       <ProductCondensedCart product={product} key={product._id} />
@@ -85,10 +141,13 @@ class Cart extends Component{
      return temp_rem;
   }
 
-  /* Will send a message of either not having enough funds to purchase
-   the products in the cart or complete the purchase of the products
-   in the user's cart and clear the cart of all products if
-   the user has enough funds to purchase the total cost of the products*/
+  /* Will send a message of not being able to make a purchase due to no products in the cart,
+   not having enough funds to purchase the products in the cart if the user has insufficient funds,
+   or of completing the purchase of the products in the user's cart
+   and clear the cart of all products if the user has enough funds to purchase
+   the total cost of the products. This will also update the user's account's balance after
+   a successful purchase in the MongoDB database and set the state value of the App component's
+   balance state variable to the remaining balance after a successful purchase. */
   clickPurchase = async e => {
 
     if(this.state.cart.length !== 0)
@@ -98,7 +157,7 @@ class Cart extends Component{
           //remaining balance
           let rem_bal = await this.remainBalance();
 
-          fetch('http://localhost:3000/account/'+this.props.accID, {
+          fetch('http://localhost:3000/account/balance/'+this.props.accID, {
           method: 'put',
           headers: {
             'Content-Type': 'application/json'
@@ -110,13 +169,18 @@ class Cart extends Component{
           })
           }).then(res => {
             res.json();
-            alert("You have successfully purchased the products from your cart and the delivery details were sent to your email: " + this.props.userEmail + ".");
+
+            let message = "You have successfully purchased the products from your cart and the delivery details were sent to your email: " + this.props.userEmail + ".";
+            this.props.setMessage(message);
+            this.props.showModal();
+
             this.props.setaccBalance(rem_bal);
 
           },
               err => {
-                    alert("An error occurred and the products in your cart were not purchased. Please try again.");
-
+                    let message = "An error occurred and the products in your cart were not purchased. Please try again.";
+                    this.props.setMessage(message);
+                    this.props.showModal();
               });
 
 
@@ -127,12 +191,16 @@ class Cart extends Component{
         }
         else
         {
-          alert("You don't have enough money to buy all the desired products in your cart.");
+          let message = "You don't have enough money to buy all the desired products in your cart.";
+          await this.props.setMessage(message);
+          await this.props.showModal();
         }
     }
     else
     {
-      alert("You have no products in your cart to make a purchase.");
+      let message = "You have no products in your cart to make a purchase.";
+      await this.props.setMessage(message);
+      await this.props.showModal();
     }
 
   };
@@ -141,8 +209,8 @@ class Cart extends Component{
 
     let cartDisplay;
 
-    /*If loggedin to an account then the cart will display,
-    otherwise the cart will not dispaly*/
+    /* If the user is logged into an account, then the cart will display;
+    otherwise the cart will not display */
     if(this.props.loginDisplay)
     {
       cartDisplay = ""

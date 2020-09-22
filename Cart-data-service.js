@@ -18,10 +18,10 @@ class Cart_DataService{
     return instance;
   }
 
-  //This function checks if the product is on the cart
+  //Checks if the product is on the cart
   itemOnCart = item => {
     for(let i = 0; i < cart.length; i++){
-      if(cart[i]._id === item._id)
+      if(cart[i] === item._id)
       {
         return true;
       }
@@ -29,18 +29,18 @@ class Cart_DataService{
     return false;
   }
 
-  //Function to help add product items to the cart
+  //Adds product items to the cart
   addCartItem = item =>
   {
-    cart.push(item);
+    cart.push(item._id);
     ns.postNotification(NOTIF_CART_CHANGED, cart);
   }
 
-  //Function to remove the desired product from the cart
+  //Removes the desired product from the cart
   removeCartItem = item => {
     for (let i = 0; i < cart.length; i++)
     {
-      if(cart[i]._id === item._id)
+      if(cart[i] === item._id)
       {
           cart.splice(i,1);
           ns.postNotification(NOTIF_CART_CHANGED, cart);
@@ -49,7 +49,7 @@ class Cart_DataService{
     }
   }
 
-  //Function to remove all the products from the cart after a successful purchase
+  //Removes all the products from the cart after a successful purchase
   removeAfterPurchase = async e => {
       cart = [];
       await ns.postNotification(NOTIF_CART_CHANGED, cart);
