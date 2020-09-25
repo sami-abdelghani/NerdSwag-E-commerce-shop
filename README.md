@@ -8,4 +8,4 @@ I learned how
 The NerdSwag e-commerce shop front end 
 
 # Software and languages used
-React, Javascript, Node JS, body-parser, Express, Mongoose, MongoDB, npm(node package manager), nodemon, and Postman(To add the products in the shop to the MongoDB database)
+React, Javascript, HTML, CSS, Bootstrap 4, whatwg-fetch, JQuery, Tether, MongoDB, and npm(node package manager)
