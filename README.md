@@ -6,3 +6,6 @@ I learned how to recieve, add, and edit data in the MongoDB database through HTT
 
 # Software and languages used
 React, Javascript, HTML, CSS, Bootstrap 4, whatwg-fetch, JQuery, Tether, MongoDB, and npm(node package manager)
+
+# Demo Video
+This project was done and ran locally on my computer through my localhost ports, so I made a demo video quickly showing and explaining everything about this project. Please email me at sabdelghani777@gmail.com to request the demo video, since it's too big to upload on Github and Linkedin. I hope to see your email request for my NerdSwag E-commerce shop demo video.
